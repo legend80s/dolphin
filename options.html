@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Auto decodeURIComponent Options Page - Chrome Extension</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="./node_modules/codemirror/lib/codemirror.css">
+
+  <style>
+    body {
+      margin: 1rem;
+    }
+
+    .delay-input {
+      margin-left: 1rem;
+    }
+
+    .url-filter {
+      margin-left: 1rem;
+      margin-right: 0.5rem;
+    }
+
+    .toasts-wrapper {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-height: 200px;
+      width: 100%;
+    }
+
+    .save-btn-wrapper {
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <textarea name="rules" id="rules" cols="30" rows="10" style="display: none">
+
+  </textarea>
+
+  <div class="save-btn-wrapper">
+    <button type="button" class="btn btn-primary" id="save-btn">Save Rules</button>
+  </div>
+
+  <!-- Toast -->
+  <div aria-live="polite" aria-atomic="true" class="toasts-wrapper">
+    <!-- Position it -->
+    <div style="position: absolute; top: 1rem; right: 1rem; min-width: 300px;">
+
+      <!-- Then put toasts within -->
+      <div class="toast hide" id="save-delay-toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="./logo.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
+          <strong class="mr-auto">AutoTextDecoder</strong>
+          <small class="text-muted">just now</small>
+        </div>
+        <div class="toast-body" style="color: green;">
+          Saved
+        </div>
+      </div>
+
+      <div class="toast hide" id="save-delay-error-toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="./logo.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
+          <strong class="mr-auto">AutoTextDecoder</strong>
+          <small class="text-muted">just now</small>
+        </div>
+        <div class="toast-body">
+          <div style="color: red;" role="alert">
+            Save failed! Open Chrome Console for details.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+  <script src="./node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="./node_modules/codemirror/mode/javascript/javascript.js"></script>
+
+  <script src="./options.js"></script>
+</body>
+
+</html>
