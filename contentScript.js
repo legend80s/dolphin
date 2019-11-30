@@ -1,11 +1,48 @@
-async function main() {
-  const delay = await getDelay();
+const DEFAULT_DELAY = 1000;
+const contentScriptRunAt = Date.now();
 
-  // wait for all the async request completed then do the decode
-  delay !== -1 && setTimeout(() => decode(delay), delay);
+async function main() {
+  // console.log('document:', document.readyState);
+
+  // console.time('getRule')
+  const rule = await getRule();
+  // console.timeEnd('getRule')
+
+  // console.log('rule:', rule);
+
+  // not run
+  if (!rule || rule.disabled) { return; };
+
+  const userSetDelay = rule.delay;
+  // console.log('document:', document.readyState);
+
+  // if `onLoad` has been fired after `getRule`
+  if (document.readyState === 'complete') {
+    onLoad(userSetDelay);
+  } else {
+    // not fired register `onLoad`.
+    // and wait for all the async request completed then do the decode
+    window.addEventListener('load', () => onLoad(userSetDelay));
+  }
 }
 
 main();
+
+function onLoad(userSetDelay) {
+  const onloadOffset = Date.now() - contentScriptRunAt;
+
+  // decode ASAP after onLoad
+  if (typeof userSetDelay === 'undefined') {
+    decode(onloadOffset);
+  } else {
+    // user set delay is much bigger than `onloadOffset`, then re-`decode`
+    if (userSetDelay - onloadOffset > 100) {
+      setTimeout(() => decode(userSetDelay), userSetDelay);
+    } else {
+      decode(onloadOffset);
+    }
+  }
+}
 
 function findAllTextNodes(element) {
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
@@ -37,7 +74,7 @@ function decode(delay) {
   });
 
   console.group('🐬.crx', chrome.extension.getURL('options.html'))
-  log('After', delay, 'ms, the async rendering is expected to complete.');
+  log('After', delay, 'ms, the async rendering is expected to be complete.');
   log('Find', textNodes.length, 'textNode(s).');
   log('%c%d', 'color:blue;', encodedTextNodes.length, 'textNode(s) `decodeURIComponent`ed.');
   console.groupEnd();
@@ -59,36 +96,40 @@ function isEncoded(str) {
   }
 }
 
-async function getDelay() {
-  const DEFAULT_DELAY = 1000;
+async function getRule() {
   const href = window.location.href;
 
-  try {
-    const rules = await getRules();
-    const rule = rules.find(rule => href.startsWith(rule.url))
+  const rules = await getRules();
+  const rule = rules.find(rule => href.startsWith(rule.url))
 
-    if (!rule) {
-      console.group('🐬.crx', chrome.extension.getURL('options.html'))
-      console.log('No rule found for current window. Dolphin switched off.');
-      console.groupEnd();
+  if (!rule) {
+    console.group('🐬.crx', chrome.extension.getURL('options.html'))
+    console.log('No rule found for current window. Dolphin switched off.');
+    console.groupEnd();
 
-      return -1;
-    }
-
-    return rule.delay;
-  } catch (error) {
-    console.warn('getDelay', error);
-
-    return DEFAULT_DELAY;
+    return null;
   }
+
+  return rule;
 }
 
 /**
- * @returns {Promise<Array<{ url: string; delay: string }>>} key is url, value is delay
+ * @returns {Promise<Array<{ url: string; delay: string; disabled: boolean }>>} key is url, value is delay
  */
 async function getRules() {
+  const DEFAULT_RULES = [
+    {
+      url: 'http://',
+      disabled: false,
+    },
+    {
+      url: 'https://',
+      disabled: false,
+    }
+  ];
+
   return new Promise(resolve => {
-    chrome.storage.sync.get(['rules'], (items) => {
+    chrome.storage.sync.get({ rules: DEFAULT_RULES }, (items) => {
       resolve(items.rules);
     });
   });
