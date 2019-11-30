@@ -1,14 +1,14 @@
 // chrome-extension://mgdjhhejjfeipeljfoheogagpjlccoij/options.html
 
 {
-  const DEFAULT_RULES = [
+  const RULES_PLACEHOLDER = [
     {
-      delay: 400,
-      url: 'https://developer.mozilla.org/',
+      url: 'http://',
+      disabled: false,
     },
     {
-      delay: 500,
-      url: 'https://stackoverflow.com/',
+      url: 'https://',
+      disabled: false,
     }
   ];
 
@@ -32,7 +32,13 @@
     bindEvents();
     $('.toast').toast({ delay: 1500 });
 
-    myCodeMirror.setValue(JSON.stringify(await getInitialRules(), null, 2));
+    showRules(myCodeMirror);
+  }
+
+  async function showRules(cm) {
+    const rules = await getRules() || RULES_PLACEHOLDER;
+
+    cm.setValue(JSON.stringify(rules, null, 2));
   }
 
   function bindEvents() {
@@ -42,10 +48,13 @@
     document.getElementById('add-btn').addEventListener('click', () => {
       const newRule = { delay: 1000, url: `https://example${newRuleCount ? newRuleCount : ''}.com` };
 
+      const parsedRules = parseJSON(myCodeMirror.getValue());
+      const existingRules = Array.isArray(parsedRules) ? parsedRules : [];
+
       myCodeMirror.setValue(
         JSON.stringify(
           [newRule].concat(
-            JSON.parse(myCodeMirror.getValue())
+            existingRules
           ),
           null,
           2
@@ -57,6 +66,16 @@
 
     // save rules
     document.getElementById('save-btn').addEventListener('click', () => tryToSaveRules(myCodeMirror));
+  }
+
+  function parseJSON(jsonStr) {
+    try {
+      return JSON.parse(jsonStr);
+    } catch (error) {
+      console.log(`JSON.parse "${jsonStr}" error`, error);
+
+      return jsonStr;
+    }
   }
 
   function myAddEventListener(element, eventNames, handler) {
@@ -87,11 +106,11 @@
    * @param {CodeMirror} codeMirror
    */
   async function tryToSaveRules(codeMirror) {
-    const value = codeMirror.getValue();
+    const value = codeMirror.getValue().trim();
     let rules;
 
     try {
-      rules = JSON.parse(value);
+      rules = value ? JSON.parse(value) : RULES_PLACEHOLDER.map(rule => ({ ...rule, disabled: true }));
 
       await saveRules(rules);
     } catch (error) {
@@ -106,13 +125,19 @@
   }
 
   /**
-   * @returns {Promise<Array<{ url: string; delay: string }>>} key is url, value is delay
+   * @returns {Promise<Array<{ url: string; delay: string; disabled: boolean }>>} key is url, value is delay
    */
   async function getRules() {
     return new Promise(resolve => {
-      chrome.storage.sync.get(['rules'], (items) => {
-        resolve(items.rules);
-      });
+      try {
+          chrome.storage.sync.get(['rules'], (items) => {
+          resolve(items.rules);
+        });
+      } catch (error) {
+        console.warn('getRules', error);
+
+        resolve('')
+      }
     });
   }
 
@@ -135,17 +160,4 @@
   function showErrorToast() {
     $('#save-delay-error-toast').toast('show');
   }
-
-  async function getInitialRules() {
-    let initialRules = DEFAULT_RULES;
-
-    try {
-      initialRules = await getRules() || DEFAULT_RULES;
-    } catch (error) {
-      console.warn('getRules', error);
-    }
-
-    return initialRules;
-  }
-
 }
