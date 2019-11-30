@@ -5,14 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>🐬 AutoTextDecoder's Options Page - Chrome Extension</title>
+  <title>AutoTextDecoder's Options Page - Chrome Extension</title>
+  <link rel="shortcut icon" href="./dolphin.png" type="image/x-icon">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/lib/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/addon/fold/foldgutter.css">
 
   <style>
     body {
-      margin: 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     .delay-input {
@@ -38,11 +41,13 @@
     }
 
     .CodeMirror {
-      width: 100%;
+      width: 80%;
       height: 100%;
+      margin: 0 auto;
       font-family: monaco, 'Source Code Pro', Consolas, Menlo, Courier, monospace;
       font-size: 12px;
       line-height: 1.5em;
+      border: 1px solid lightgray;
     }
   </style>
 </head>
@@ -99,8 +104,12 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
 
+  <!-- CodeMirror -->
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/lib/codemirror.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/addon/fold/foldcode.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/addon/fold/brace-fold.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.49.2/addon/fold/foldgutter.js"></script>
 
   <script src="./options.js"></script>
 </body>

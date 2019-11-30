@@ -15,8 +15,15 @@
   const textarea = document.getElementById('rules');
   const ENTER_PRESSED = 'enter-pressed';
   const myCodeMirror = window.CodeMirror.fromTextArea(textarea, {
-    lineNumbers: true,
     mode: "javascript",
+    lineNumbers: true,
+    lineWrapping: true,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    extraKeys: {
+      'Ctrl-S': cm => tryToSaveRules(cm),
+      'Cmd-S': cm => tryToSaveRules(cm),
+    },
   });
 
   main();
@@ -30,6 +37,8 @@
 
   function bindEvents() {
     let newRuleCount = 0;
+
+    // add new rule
     document.getElementById('add-btn').addEventListener('click', () => {
       const newRule = { delay: 1000, url: `https://example${newRuleCount ? newRuleCount : ''}.com` };
 
@@ -46,23 +55,8 @@
       ++newRuleCount;
     });
 
-    document.getElementById('save-btn').addEventListener('click', async () => {
-      const value = myCodeMirror.getValue();
-      let rules;
-
-      try {
-        rules = JSON.parse(value);
-
-        await saveRules(rules);
-      } catch (error) {
-        showErrorToast();
-        return console.warn('Invalid JSON', error);
-      }
-
-      console.log('rules:', rules);
-
-      showToast();
-    });
+    // save rules
+    document.getElementById('save-btn').addEventListener('click', () => tryToSaveRules(myCodeMirror));
   }
 
   function myAddEventListener(element, eventNames, handler) {
@@ -87,6 +81,28 @@
         }
       });
     });
+  }
+
+  /**
+   * @param {CodeMirror} codeMirror
+   */
+  async function tryToSaveRules(codeMirror) {
+    const value = codeMirror.getValue();
+    let rules;
+
+    try {
+      rules = JSON.parse(value);
+
+      await saveRules(rules);
+    } catch (error) {
+      showErrorToast();
+
+      return console.warn('Invalid JSON', error);
+    }
+
+    console.log('rules:', rules);
+
+    showToast();
   }
 
   /**
