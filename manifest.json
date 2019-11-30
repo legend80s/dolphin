@@ -1,12 +1,18 @@
 {
   "name": "Dolphin",
-  "description" : "Auto Text Decoder. Apply `decodeURIComponent` to all the encoded content in the page.",
+  "description" : "🐬 Auto Text Decoder. Apply `decodeURIComponent` to all the encoded content in the page.",
   "version": "1.0",
   "manifest_version": 2,
   "browser_action": {
     "default_icon": "./dolphin.png"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage",
+    "contextMenus"
+  ],
+  "icons": {
+    "16": "./dolphin.png"
+  },
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
