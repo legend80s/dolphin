@@ -15,3 +15,47 @@ chrome.runtime.onMessage.addListener((request, sender) => {
     chrome.browserAction.setBadgeText({ text, tabId: sender.tab.id });
   }
 });
+
+setupMenuContext();
+
+// create menuContext when right click
+function setupMenuContext() {
+  const DECODER_ID = 'dolphin-decoder';
+
+  chrome.contextMenus.create({
+    type: 'separator',
+    id: 'dolphin-separator',
+    contexts: ['selection'],
+  })
+
+  chrome.contextMenus.create({
+    type: 'normal',
+    id: DECODER_ID,
+    title: 'decode "%s"',
+    contexts: ['selection'],
+  })
+
+  chrome.contextMenus.onClicked.addListener(({ menuItemId, selectionText }) => {
+    if (menuItemId === DECODER_ID) {
+      decode(selectionText);
+    }
+  });
+}
+
+function decode(selectionText) {
+  if (!selectionText) { return; }
+
+  let decoded;
+
+  try {
+    decoded = decodeURIComponent(selectionText);
+  } catch (error) {
+    return showModal(`decode "${selectionText}" error: ${error.message}`)
+  }
+
+  showModal(decoded);
+}
+
+function showModal(text) {
+  alert(text);
+}
