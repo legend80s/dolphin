@@ -4,6 +4,8 @@
   "description": "🐬 An AutoTextDecoder Chrome Extension. Apply `decodeURIComponent` to all the encoded content in the page.",
   "main": "background.js",
   "scripts": {
+    "mkdir-dist": "rm -rf dist &&  mkdir dist",
+    "build": "npm run mkdir-dist && zip -r dist/dolphin.zip src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
