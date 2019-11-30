@@ -1,17 +1,29 @@
 {
-  "name": "chrome-extension-auto-decode-uri-component",
+  "name": "dolphin",
   "version": "1.0.0",
-  "description": "",
+  "description": "🐬 An AutoTextDecoder Chrome Extension. Apply `decodeURIComponent` to all the encoded content in the page.",
   "main": "background.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "Chrome",
+    "Extension",
+    "Decode",
+    "decodeURIComponent"
+  ],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "git-commit-msg-linter": "^2.3.9"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legend80s/dolphin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/legend80s/dolphin/issues"
+  },
+  "homepage": "https://github.com/legend80s/dolphin#readme"
 }
