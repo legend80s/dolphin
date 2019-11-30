@@ -29,6 +29,23 @@
   }
 
   function bindEvents() {
+    let newRuleCount = 0;
+    document.getElementById('add-btn').addEventListener('click', () => {
+      const newRule = { delay: 1000, url: `https://example${newRuleCount ? newRuleCount : ''}.com` };
+
+      myCodeMirror.setValue(
+        JSON.stringify(
+          [newRule].concat(
+            JSON.parse(myCodeMirror.getValue())
+          ),
+          null,
+          2
+        )
+      );
+
+      ++newRuleCount;
+    });
+
     document.getElementById('save-btn').addEventListener('click', async () => {
       const value = myCodeMirror.getValue();
       let rules;

@@ -69,7 +69,7 @@ async function getDelay() {
 
     if (!rule) {
       console.group('🐬.crx', chrome.extension.getURL('options.html'))
-      console.log('No rule found for current window. Dolphin switched off');
+      console.log('No rule found for current window. Dolphin switched off.');
       console.groupEnd();
 
       return -1;

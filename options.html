@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Auto decodeURIComponent Options Page - Chrome Extension</title>
+  <title>🐬 AutoTextDecoder's Options Page - Chrome Extension</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="./node_modules/codemirror/lib/codemirror.css">
@@ -36,6 +36,14 @@
       text-align: center;
       margin-top: 2rem;
     }
+
+    .CodeMirror {
+      width: 100%;
+      height: 100%;
+      font-family: monaco, 'Source Code Pro', Consolas, Menlo, Courier, monospace;
+      font-size: 12px;
+      line-height: 1.5em;
+    }
   </style>
 </head>
 
@@ -45,18 +53,19 @@
   </textarea>
 
   <div class="save-btn-wrapper">
-    <button type="button" class="btn btn-primary" id="save-btn">Save Rules</button>
+    <button type="button" class="btn btn-primary mr-4" id="save-btn">Save Rules</button>
+    <button type="button" class="btn btn-primary" id="add-btn">Add A Rule</button>
   </div>
 
   <!-- Toast -->
   <div aria-live="polite" aria-atomic="true" class="toasts-wrapper">
     <!-- Position it -->
-    <div style="position: absolute; top: 1rem; right: 1rem; min-width: 300px;">
+    <div style="position: fixed; top: 1rem; right: 1rem; min-width: 300px;">
 
       <!-- Then put toasts within -->
       <div class="toast hide" id="save-delay-toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="./logo.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
+          <img src="./dolphin.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
           <strong class="mr-auto">AutoTextDecoder</strong>
           <small class="text-muted">just now</small>
         </div>
@@ -67,7 +76,7 @@
 
       <div class="toast hide" id="save-delay-error-toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="./logo.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
+          <img src="./dolphin.png" class="rounded mr-2" alt="AutoTextDecoder logo" width="16px">
           <strong class="mr-auto">AutoTextDecoder</strong>
           <small class="text-muted">just now</small>
         </div>
