@@ -4,7 +4,7 @@
   <img src="https://github.com/legend80s/dolphin/blob/master/src/dolphin.png?raw=true" alt="dolphin logo" >
 </p>
 
-> Auto Text Decoder. A niche Chrome extension just for decoding.
+#### **<p align="center" style="color: #cb3837;">Auto Text Decoder. A niche Chrome extension just for decoding.</p>**
 
 ## How
 
