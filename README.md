@@ -22,11 +22,12 @@ Hosted by github click to download.
 
 There are two decode result modes, **overwrite mode** (the default one) and **append mode**. Both translate inlinely.
 
-Or you can switch off the inlinely or somewhat intrusive modes in the options page by setting `disabled: true` and decode by menu.
+You can switch off the inline or somewhat intrusive modes in the options page by setting `disabled: true` and decode by menu.
 
 ![options.png](https://raw.githubusercontent.com/legend80s/dolphin/master/options.png)
 
-<p align="center">The modes and which websites to decode is configurable in options page.</p>
+<p align="center">Translate modes and which websites to decode is configurable in the options page.</p>
+
 #### Overwrite Mode
 
 ![overwrite-mode.png](https://raw.githubusercontent.com/legend80s/dolphin/master/overwrite-mode.png)
