@@ -21,23 +21,35 @@ setupMenuContext();
 // create menuContext when right click
 function setupMenuContext() {
   const DECODER_ID = 'dolphin-decoder';
+  const ENCODER_ID = 'dolphin-encoder';
 
   chrome.contextMenus.create({
     type: 'separator',
     id: 'dolphin-separator',
     contexts: ['selection'],
-  })
+  });
 
   chrome.contextMenus.create({
     type: 'normal',
     id: DECODER_ID,
     title: 'decode "%s"',
     contexts: ['selection'],
-  })
+  });
+
+  chrome.contextMenus.create({
+    type: 'normal',
+    id: ENCODER_ID,
+    title: 'encode "%s"',
+    contexts: ['selection'],
+  });
 
   chrome.contextMenus.onClicked.addListener(({ menuItemId, selectionText }) => {
     if (menuItemId === DECODER_ID) {
-      decode(selectionText);
+      return decode(selectionText);
+    }
+
+    if (menuItemId === ENCODER_ID) {
+      return encode(selectionText);
     }
   });
 }
@@ -54,6 +66,20 @@ function decode(selectionText) {
   }
 
   showModal(decoded);
+}
+
+function encode(selectionText) {
+  if (!selectionText) { return; }
+
+  let encoded;
+
+  try {
+    encoded = encodeURIComponent(selectionText);
+  } catch (error) {
+    return showModal(`encode "${selectionText}" error: ${error.message}`)
+  }
+
+  showModal(encoded);
 }
 
 function showModal(text) {
