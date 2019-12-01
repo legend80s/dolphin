@@ -33,6 +33,7 @@ You can switch off the inline or somewhat intrusive modes in the options page by
 ![options](https://raw.githubusercontent.com/legend80s/dolphin/master/options.png)
 
 <p align="center">Translate modes and which websites to decode is configurable in the options page.</p>
+
 #### Overwrite Mode
 
 ![overwrite-mode](https://raw.githubusercontent.com/legend80s/dolphin/master/overwrite-mode.png)
