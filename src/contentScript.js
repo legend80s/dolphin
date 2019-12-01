@@ -13,7 +13,13 @@ async function main() {
   // console.log('rule:', rule);
 
   // not run
-  if (!rule || rule.disabled) { return; };
+  if (!rule || rule.disabled) {
+    console.group('🐬.crx', chrome.extension.getURL('options.html'))
+    console.log('No rule found or not enabled for current window. Dolphin switched off.');
+    console.groupEnd();
+
+    return;
+  };
 
   const userSetDelay = rule.delay;
   // console.log('document:', document.readyState);
@@ -110,10 +116,6 @@ async function getRule() {
   const rule = rules.find(rule => href.startsWith(rule.url))
 
   if (!rule) {
-    console.group('🐬.crx', chrome.extension.getURL('options.html'))
-    console.log('No rule found for current window. Dolphin switched off.');
-    console.groupEnd();
-
     return null;
   }
 
