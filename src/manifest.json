@@ -11,7 +11,8 @@
     "contextMenus"
   ],
   "icons": {
-    "16": "./dolphin.png"
+    "16": "./dolphin.png",
+    "128": "./dolphin-128.png"
   },
   "options_ui": {
     "page": "options.html",
