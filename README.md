@@ -1,6 +1,8 @@
 # Dolphin
 
-![dolphin.png](https://github.com/legend80s/dolphin/blob/master/src/dolphin.png?raw=true)
+<p align="center">
+  <img src="https://github.com/legend80s/dolphin/blob/master/src/dolphin.png?raw=true" alt="dolphin logo" >
+</p>
 
 > Auto Text Decoder. A niche Chrome extension just for decoding.
 
