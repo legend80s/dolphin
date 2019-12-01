@@ -14,7 +14,13 @@ The decoded content will be highlighted by surrounding it with a pair of 🐬s.
 
 ## Install
 
-Hosted by github click to download.
+The extension is currently hosted only in github. To install
+
+1. Open https://github.com/legend80s/dolphin/blob/master/dist/dolphin.crx
+2. Click download button.
+3. Drag the downloaded **dolphin.crx** to [chrome://extensions](chrome://extensions).
+
+Or click [download](https://raw.githubusercontent.com/legend80s/dolphin/master/dist/dolphin.crx) directly.
 
 ## Use
 
@@ -27,7 +33,6 @@ You can switch off the inline or somewhat intrusive modes in the options page by
 ![options](https://raw.githubusercontent.com/legend80s/dolphin/master/options.png)
 
 <p align="center">Translate modes and which websites to decode is configurable in the options page.</p>
-
 #### Overwrite Mode
 
 ![overwrite-mode](https://raw.githubusercontent.com/legend80s/dolphin/master/overwrite-mode.png)
