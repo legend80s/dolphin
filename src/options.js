@@ -42,6 +42,8 @@
   }
 
   function bindEvents() {
+    bindTranslateMode();
+
     let newRuleCount = 0;
 
     // add new rule
@@ -66,6 +68,30 @@
 
     // save rules
     document.getElementById('save-btn').addEventListener('click', () => tryToSaveRules(myCodeMirror));
+  }
+
+  async function bindTranslateMode() {
+    let storedMode = await getTranslateMode();
+    console.log('storedMode:', storedMode);
+
+    document.querySelector(`[data-mode=${storedMode}]`).classList.add('active');
+
+    document.getElementById('translate-btn-wrapper').addEventListener('click', async (event) => {
+      const newMode = event.target.dataset.mode;
+
+      if (newMode === storedMode) {
+        return;
+      }
+
+      const success = await tryToSaveTranslateMode(newMode);
+
+      if (success) {
+        document.querySelector(`[data-mode=${storedMode}]`).classList.remove('active');
+        document.querySelector(`[data-mode=${newMode}]`).classList.add('active');
+
+        storedMode = newMode;
+      }
+    });
   }
 
   function parseJSON(jsonStr) {
@@ -102,6 +128,23 @@
     });
   }
 
+  async function tryToSaveTranslateMode(mode) {
+    if (!mode) { return; }
+
+    try {
+      await saveTranslateMode(mode);
+
+    } catch (error) {
+      showErrorToast();
+
+      return console.log('saveTranslateMode', error);
+    }
+
+    showToast();
+
+    return mode;
+  }
+
   /**
    * @param {CodeMirror} codeMirror
    */
@@ -116,7 +159,7 @@
     } catch (error) {
       showErrorToast();
 
-      return console.warn('Invalid JSON', error);
+      return console.log('Invalid JSON', error);
     }
 
     console.log('rules:', rules);
@@ -130,11 +173,11 @@
   async function getRules() {
     return new Promise(resolve => {
       try {
-          chrome.storage.sync.get(['rules'], (items) => {
+        chrome.storage.sync.get(['rules'], (items) => {
           resolve(items.rules);
         });
       } catch (error) {
-        console.warn('getRules', error);
+        console.log('getRules', error);
 
         resolve('')
       }
@@ -148,6 +191,34 @@
   async function saveRules(rules) {
     return new Promise(resolve => {
       chrome.storage.sync.set({ rules }, (...args) => {
+        resolve(...args);
+      });
+    });
+  }
+
+  async function getTranslateMode() {
+    const DEFAULT_MODE = 'OVERWRITE';
+
+    return new Promise(resolve => {
+      try {
+        chrome.storage.sync.get({ translateMode: DEFAULT_MODE }, (items) => {
+          resolve(items.translateMode);
+        });
+      } catch (error) {
+        console.log('getTranslateMode', error);
+
+        resolve(DEFAULT_MODE)
+      }
+    });
+  }
+
+  /**
+   *
+   * @param {string} mode
+   */
+  async function saveTranslateMode(mode) {
+    return new Promise(resolve => {
+      chrome.storage.sync.set({ translateMode: mode }, (...args) => {
         resolve(...args);
       });
     });

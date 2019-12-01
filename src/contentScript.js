@@ -1,5 +1,7 @@
 const DEFAULT_DELAY = 1000;
 const contentScriptRunAt = Date.now();
+const TRANSLATE_MODES = mirror('APPEND', 'OVERWRITE');
+const DEFAULT_MODE = TRANSLATE_MODES.OVERWRITE;
 
 async function main() {
   // console.log('document:', document.readyState);
@@ -28,18 +30,19 @@ async function main() {
 
 main();
 
-function onLoad(userSetDelay) {
+async function onLoad(userSetDelay) {
   const onloadOffset = Date.now() - contentScriptRunAt;
+  const mode = await getTranslateMode();
 
   // decode ASAP after onLoad
   if (typeof userSetDelay === 'undefined') {
-    decode(onloadOffset);
+    decode(onloadOffset, mode);
   } else {
     // user set delay is much bigger than `onloadOffset`, then re-`decode`
     if (userSetDelay - onloadOffset > 100) {
       setTimeout(() => decode(userSetDelay), userSetDelay);
     } else {
-      decode(onloadOffset);
+      decode(onloadOffset, mode);
     }
   }
 }
@@ -59,12 +62,12 @@ function log(...args) {
   console.log(...args);
 }
 
-function decode(delay) {
+function decode(delay, translateMode) {
   const textNodes = findAllTextNodes(document.body);
   const encodedTextNodes = textNodes.filter(({ textContent }) => isEncoded(textContent));
 
   encodedTextNodes.forEach(textNode => {
-    textNode.textContent = textNode.textContent
+    textNode.textContent = (translateMode === TRANSLATE_MODES.APPEND ? textNode.textContent : '')
       + `🐬` + decodeURIComponent(textNode.textContent) + '🐬';
   });
 
@@ -76,7 +79,11 @@ function decode(delay) {
   console.group('🐬.crx', chrome.extension.getURL('options.html'))
   log('After', delay, 'ms, the async rendering is expected to be complete.');
   log('Find', textNodes.length, 'textNode(s).');
-  log('%c%d', 'color:blue;', encodedTextNodes.length, 'textNode(s) `decodeURIComponent`ed.');
+  log(
+    '%c%d', 'color:blue;', encodedTextNodes.length,
+    'textNode(s) `decodeURIComponent`ed.',
+    `Translate mode: ${translateMode}.`,
+  );
   console.groupEnd();
 }
 
@@ -113,6 +120,20 @@ async function getRule() {
   return rule;
 }
 
+async function getTranslateMode() {
+  return new Promise(resolve => {
+    try {
+      chrome.storage.sync.get({ translateMode: DEFAULT_MODE }, (items) => {
+        resolve(items.translateMode);
+      });
+    } catch (error) {
+      console.log('getTranslateMode', error);
+
+      resolve(DEFAULT_MODE)
+    }
+  });
+}
+
 /**
  * @returns {Promise<Array<{ url: string; delay: string; disabled: boolean }>>} key is url, value is delay
  */
@@ -133,4 +154,12 @@ async function getRules() {
       resolve(items.rules);
     });
   });
+}
+
+/**
+ * @param  {...string} args
+ * @returns {Record<string, string>}
+ */
+function mirror(...args) {
+  return args.reduce((acc, key) => ({ ...acc, [key]: key }), {})
 }

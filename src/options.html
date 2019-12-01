@@ -43,7 +43,7 @@
     .CodeMirror {
       width: 80%;
       height: 100%;
-      min-height: 40vh;
+      min-height: 20vh;
       margin: 0 auto;
       font-family: monaco, 'Source Code Pro', Consolas, Menlo, Courier, monospace;
       font-size: 12px;
@@ -52,7 +52,7 @@
     }
 
     .CodeMirror-scroll {
-      min-height: 40vh;
+      min-height: 20vh;
     }
   </style>
 </head>
@@ -61,8 +61,14 @@
   <textarea name="rules" id="rules" cols="30" rows="10" style="display: none"></textarea>
 
   <div class="save-btn-wrapper">
-    <button type="button" class="btn btn-primary mr-4" id="save-btn">Save Rules</button>
-    <button type="button" class="btn btn-primary" id="add-btn">Add A Rule</button>
+    <button type="button" class="btn btn-primary btn-sm mr-2" id="save-btn">Save Rules</button>
+    <button type="button" class="btn btn-primary btn-sm mr-4" id="add-btn">Add A Rule</button>
+
+    <label for="options">Translate Mode:</label>
+    <div class="btn-group" role="group" aria-label="Translate Mode" id="translate-btn-wrapper">
+      <button type="button" class="btn btn-outline-success btn-sm" data-mode="APPEND">APPEND</button>
+      <button type="button" class="btn btn-outline-success btn-sm" data-mode="OVERWRITE">OVERWRITE</button>
+    </div>
   </div>
 
   <!-- Toast -->
