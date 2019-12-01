@@ -8,6 +8,8 @@
 
 Apply `decodeURIComponent` to all the encoded content in the page.
 
+The decoded content will be highlighted by surrounding it with a pair of 🐬s. 
+
 ## Install
 
 By chrome webstore.
